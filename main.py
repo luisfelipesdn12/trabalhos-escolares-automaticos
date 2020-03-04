@@ -1,4 +1,6 @@
 import wikipedia as wk #para webscrapping da wikipedia
+from collections import defaultdict
+import sumarizacao
 
 wk.set_lang('pt')
 userInput = dict()
@@ -19,4 +21,9 @@ userInput['prefixo'] = retornaPrefixo()
 page = retornaWikiPage(userInput['pesquisa'])
 
 print('Título:', userInput['prefixo'], userInput['pesquisa'])
-print(page.content)
+
+t = sumarizacao.Texto(page.summary)
+resumo = t.resumir()
+
+print('\n---\nSumário da Wikipedia:\n\n', page.summary)
+print('\n---\nSumário da Wikipedia RESUMIDO AUTOMÁTICAMENTE:\n\n', resumo)
