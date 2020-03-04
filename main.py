@@ -1,5 +1,4 @@
 import wikipedia as wk #para webscrapping da wikipedia
-from collections import defaultdict
 import sumarizacao
 
 wk.set_lang('pt')
