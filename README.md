@@ -28,9 +28,10 @@ Digitar um tema e esperar. Depois de um tempo, ter em mãos um arquivo formatado
 
 - Separa o conteúdo em parágrafos e **define palavras chave** para cada;
 
-  > Para isso, usei um algoritmo de Compreensão de Linguagem Natural por inteligência artificial do IBM Cloud/ Watson, [clique aqui](https://cloud.ibm.com/catalog/services/natural-language-understanding) para ver.
+  > Para isso, usei um algoritmo de `Compreensão de Linguagem Natural` por inteligência artificial do `IBM Cloud/ Watson`, [clique aqui](https://cloud.ibm.com/catalog/services/natural-language-understanding) para ver.
 
 - Faz o **download de imagens** com base em palavras-chave extraídas do resumo;
+  > Usei a API do `Google Cloud Platform` chamada `Custom Search`, [clique aqui](https://developers.google.com/custom-search/docs/overview) para ver.
 
 - Com todas as informações, formata um arquivo de texto com as imagens e o conteúdo;
 
