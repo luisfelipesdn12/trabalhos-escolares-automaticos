@@ -9,12 +9,17 @@ import sumarizacao
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
+#para pegar URL da Google Images:
+from googleapiclient.discovery import build
+#credenciais:
+from credentials import credentials
+
 
 def retornaPequisa():
   return(str(input('Pequisa: ')))
 
 def retornaWikiPage(pesquisa):
-  print('CAPITURANDO CONTEÚDO DA WIKIPEDIA...')
+  print(f'CAPITURANDO CONTEÚDO DA WIKIPEDIA DE "{pesquisa}"...')
   page = wk.page(pesquisa)
   print('CONTEÚDO CAPTURADO :)')
   return(page)
@@ -59,7 +64,7 @@ def separaERetornaParagrafos(resumo):
 def retornaIBMAuth():
   #AUTENTICA:
   print('AUTENTICANDO O IBM WATSON...')
-  authenticator = IAMAuthenticator('XHxEsN5LiOhXMv68KMVVHXiOoyjuExT-Jft1HNhpv9X4')
+  authenticator = IAMAuthenticator(credentials['IBM'])
   print('IBM WATSON AUTENTICADO :)')
   return(authenticator)
 
@@ -70,7 +75,7 @@ def retornaKeyword(paragrafo, authenticator):
   )
   natural_language_understanding.set_service_url('https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/99046149-caff-413c-b9c4-12866481c76f')
   #USA:
-  print("ANALISANDO TEXTO E EXTRAINDO PALAVRAS CHAVE...")
+  print(f'ANALISANDO TEXTO E EXTRAINDO PALAVRAS CHAVE DE "{paragrafo[:20]}..." ...')
   response = natural_language_understanding.analyze(
   text= paragrafo,
   features=Features(
@@ -83,15 +88,47 @@ def retornaKeyword(paragrafo, authenticator):
     return(keywords[0])
   else: return(None)
 
-def retornaParagrafosEInfos(paragrafos_separados, authenticator):
+def retornaImagem(pesquisa):
+  print(f'PROCURANDO IMAGENS NO GOOGLE DE "{pesquisa}"...')
+  my_api_key = credentials['GCP']['my_api_key']
+  my_cse_id = credentials['GCP']['my_cse_id']
+
+  def google_search(search_term, api_key, cse_id, **kwargs):
+      service = build("customsearch", "v1", developerKey=api_key)
+      res = service.cse().list(q=search_term, cx=cse_id, **kwargs).execute()
+      return res['items']
+
+  results = google_search(
+      pesquisa,
+      my_api_key,
+      my_cse_id,
+      num=2,
+      searchType = 'image',
+      filter = '1',
+      safe = 'active',
+      imgSize = 'large')
+
+  imagens = list()
+  for result in results:
+      imagens.append(results[0]['link'])
+  print('IMAGENS ACHADAS :)')
+  return(imagens)
+
+
+
+def retornaParagrafosEInfos(pesquisa, paragrafos_separados, authenticator):
   paragrafos_e_infos = list()
 
   for paragrafo in paragrafos_separados:
     infos = dict()
     infos['text'] = paragrafo
     try: infos['keyword'] = retornaKeyword(paragrafo, authenticator)['text']
-    except TypeError: infos['keywords'] = None
-    infos['image'] = None #Por enquanto
+    except TypeError: infos['keyword'] = None
+    if infos['keyword'] != None:
+      if pesquisa != infos['keyword']:
+        infos['image'] = retornaImagem(pesquisa + ' ' + infos['keyword'])
+      else: infos['image'] = retornaImagem(infos['keyword'])
+    else: infos['image'] = None
     paragrafos_e_infos.append(infos)
 
   return(paragrafos_e_infos)
@@ -99,7 +136,7 @@ def retornaParagrafosEInfos(paragrafos_separados, authenticator):
 
 def main():
   #pesquisa = retornaPequisa()
-  pesquisa = 'Michael Jackson'
+  pesquisa = 'Bill Gates'
 
   page = retornaWikiPage(pesquisa)
 
@@ -111,9 +148,12 @@ def main():
 
   authenticator = retornaIBMAuth()
 
-  paragrafos_e_infos = retornaParagrafosEInfos(paragrafos_separados, authenticator)
+  paragrafos_e_infos = retornaParagrafosEInfos(pesquisa, paragrafos_separados, authenticator)
 
-  for pei in paragrafos_e_infos:
-    print(f'\n\{pei}n')
+  #import json
+  #print(json.dumps(paragrafos_e_infos, indent=2))
+
+  from pprint import pprint
+  pprint(paragrafos_e_infos)
 
 main()
