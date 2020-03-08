@@ -18,17 +18,17 @@ Digitar um tema e esperar. Depois de um tempo, ter em mãos um arquivo formatado
 
 - A partir desse input, faz a **pesquisa automática** na Wikipedia;
 
-  Usei a biblioteca `wikipedia` para extrair o conteúdo.
+  > Usei a biblioteca `wikipedia` para extrair o conteúdo.
 
 - Com o conteúdo dessa pesquisa, **limpa** espaços e conteúdos indesejados;
 
 - Com o conteúdo limpo, **resume** o texto;
 
-  Utilizei, como base, uma gist de sumarização do GitHub, [clique aqui](https://gist.github.com/ryukinix/15e3381286177a3b41bd) para ver.
+  > Utilizei, como base, uma gist de sumarização do GitHub, [clique aqui](https://gist.github.com/ryukinix/15e3381286177a3b41bd) para ver.
 
 - Separa o conteúdo em parágrafos e **define palavras chave** para cada;
 
-  Para isso, usei um algoritmo de Compreensão de Linguagem Natural por inteligência artificial do IBM Cloud/ Watson, [clique aqui](https://cloud.ibm.com/catalog/services/natural-language-understanding) para ver.
+  > Para isso, usei um algoritmo de Compreensão de Linguagem Natural por inteligência artificial do IBM Cloud/ Watson, [clique aqui](https://cloud.ibm.com/catalog/services/natural-language-understanding) para ver.
 
 - Faz o **download de imagens** com base em palavras-chave extraídas do resumo;
 
