@@ -10,7 +10,7 @@ Digitar um tema e esperar. Depois de um tempo, ter em mãos um arquivo formatado
 
 ## Execução:
 
-> Nota: em desenvolvimento.
+> Nota: em aperfeiçoamento.
 
 
 
