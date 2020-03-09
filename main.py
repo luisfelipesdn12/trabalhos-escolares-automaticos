@@ -132,11 +132,39 @@ def retornaParagrafosEInfos(pesquisa, paragrafos_separados, authenticator):
     paragrafos_e_infos.append(infos)
 
   return(paragrafos_e_infos)
+
+def formataERetornaTexto(pesquisa, paragrafos_e_infos):
+  print('FORMATANDO PESQUISA...')
+  texto = list()
+  texto.append(f'# Pesquisa sobre: {pesquisa}')
+  
+  for paragrafo in paragrafos_e_infos:
+    texto.append(paragrafo['text'])
+    if paragrafo['image'] != None:
+      texto.append(f'> ![{paragrafo["keyword"]}]({paragrafo["image"][0]})')
+
+  print('PESQUISA FORMATADA :)')
+
+  texto_final = '\n'.join(texto)
+  return(texto_final)
+
+def exportaArquivo(pesquisa, texto):
+  print(f'EXPORTANDO O ARQUIVO "{pesquisa}_pesquisa.md" ...')
+
+  try:
+    import os
+    os.mkdir(r'.\pesquisas')
+  except FileExistsError: pass
+    
+  file = open(f'.\pesquisas\{pesquisa}_pesquisa.md', 'w+', encoding="utf-8")
+  file.write(texto)
+  file.close()
+
+  print(f'ARQUIVO "{pesquisa}_pesquisa.md" EXPORTADO :)')
   
 
 def main():
-  #pesquisa = retornaPequisa()
-  pesquisa = 'Bill Gates'
+  pesquisa = retornaPequisa()
 
   page = retornaWikiPage(pesquisa)
 
@@ -150,8 +178,9 @@ def main():
 
   paragrafos_e_infos = retornaParagrafosEInfos(pesquisa, paragrafos_separados, authenticator)
 
-  #import json
-  #print(json.dumps(paragrafos_e_infos, indent=2))
+  texto = formataERetornaTexto(pesquisa, paragrafos_e_infos)
+
+  exportaArquivo(pesquisa, texto)
 
   from pprint import pprint
   pprint(paragrafos_e_infos)
