@@ -16,41 +16,74 @@ from credentials import credentials
 
 
 def retornaPequisa():
+  '''
+  Pergunta para o usuário
+  o termo de pesquisa e
+  retorna o input.
+  '''
   return(str(input('Pequisa: ')))
 
+def retornaPercentual():
+  '''
+  Pergunta para o usuário
+  o percentual do resumo 
+  e retorna o input.
+  '''
+  return(float(input('Percentual do resumo (0 a 1): ')))
+
 def retornaWikiPage(pesquisa):
+  '''
+  A partir de um termo de pesquisa
+  captura conteúdo da wikipedia e
+  retorna uma estancia da página.
+  '''
   print(f'CAPITURANDO CONTEÚDO DA WIKIPEDIA DE "{pesquisa}"...')
   page = wk.page(pesquisa)
   print('CONTEÚDO CAPTURADO :)')
   return(page)
 
 def retornaConteudoLimpo(SourceContent):
-    print('LIMPANDO CONTEÚDO...')
-    linhas = SourceContent.split('\n')
+  '''
+  A partir do conteúdo, 
+  limpa retirando o markdown 
+  e as linhas vazias.
+  '''
+  print('LIMPANDO CONTEÚDO...')
+  linhas = SourceContent.split('\n')
 
-    linhas_limpas = []
+  linhas_limpas = []
 
-    for linha in linhas:
-        #FILTRA E REMOVE LINHAS VAZIAS E COM == MARKDOWN ==
-        if linha == '':
-            pass
-        elif linha[:2] == '==' and linha[-2:] == "==":
-            linhas_limpas.append('##PARAGRAFO##')
-        else: linhas_limpas.append(linha)
+  for linha in linhas:
+      #FILTRA E REMOVE LINHAS VAZIAS E COM == MARKDOWN ==
+      if linha == '':
+          pass
+      elif linha[:2] == '==' and linha[-2:] == "==":
+          linhas_limpas.append('##PARAGRAFO##')
+      else: linhas_limpas.append(linha)
 
-    conteudoLimpo = '\n'.join(linhas_limpas)
+  conteudoLimpo = '\n'.join(linhas_limpas)
 
-    print('CONTEÚDO LIMPO :)')
-    return(conteudoLimpo)
+  print('CONTEÚDO LIMPO :)')
+  return(conteudoLimpo)
 
-def retornaResumo(conteudo):
+def retornaResumo(conteudo, percent):
+  '''
+  A partir do conteúdo limpo,
+  resume em x por cento
+  e retorna o resumo.
+  '''
   print('RESUMINDO CONTEÚDO...')
   t = sumarizacao.Texto(conteudo)
-  resumo = t.resumir()
+  resumo = t.resumir(percent = percent)
   print('CONTEÚDO RESUMIDO :)')
   return(resumo)
 
 def separaERetornaParagrafos(resumo):
+  '''
+  A partir do resumo, separa
+  e retorna uma lista de
+  parágrafos.
+  '''
   print('SEPARANDO PARÁGRAFOS...')
   paragrafos = resumo.split('##PARAGRAFO##')
 
@@ -62,6 +95,11 @@ def separaERetornaParagrafos(resumo):
   return(paragrafos)
 
 def retornaIBMAuth():
+  '''
+  Autentica a API da IBM Cloud/
+  Watson, e retorna uma estância
+  autenticada.
+  '''
   #AUTENTICA:
   print('AUTENTICANDO O IBM WATSON...')
   authenticator = IAMAuthenticator(credentials['IBM'])
@@ -69,6 +107,15 @@ def retornaIBMAuth():
   return(authenticator)
 
 def retornaKeyword(paragrafo, authenticator):
+  '''
+  Para cada parágrafo, analisa e
+  estabelece palavras-chave,
+  que serão usadas para a procura
+  de imagens.
+  (Tem uma nota de corte baseada na
+  relevância da palavra-chave, se
+  a relevância for menor, retorna None)
+  '''
   natural_language_understanding = NaturalLanguageUnderstandingV1(
       version='2019-07-12',
       authenticator=authenticator
@@ -89,6 +136,15 @@ def retornaKeyword(paragrafo, authenticator):
   else: return(None)
 
 def retornaImagem(pesquisa):
+  '''
+  Busca no Google Images e
+  retorna URLs de imagens
+  baseada em uma pesquisa
+  (nesse caso, a palavra-chave).
+  Retorna None se der algum erro
+  na busca, como por exemplo:
+  a cota diária da API se esgotou.
+  '''
   print(f'PROCURANDO IMAGENS NO GOOGLE DE "{pesquisa}"...')
   my_api_key = credentials['GCP']['my_api_key']
   my_cse_id = credentials['GCP']['my_cse_id']
@@ -98,25 +154,34 @@ def retornaImagem(pesquisa):
       res = service.cse().list(q=search_term, cx=cse_id, **kwargs).execute()
       return res['items']
 
-  results = google_search(
-      pesquisa,
-      my_api_key,
-      my_cse_id,
-      num=2,
-      searchType = 'image',
-      filter = '1',
-      safe = 'active',
-      imgSize = 'large')
+  try:
+    results = google_search(
+        pesquisa,
+        my_api_key,
+        my_cse_id,
+        num=2,
+        searchType = 'image',
+        filter = '1',
+        safe = 'active',
+        imgSize = 'large') 
 
-  imagens = list()
-  for result in results:
-      imagens.append(results[0]['link'])
-  print('IMAGENS ACHADAS :)')
-  return(imagens)
+    imagens = list()
+    for result in results:
+        imagens.append(results[0]['link'])
+    print('IMAGENS ACHADAS :)')
+    return(imagens)
+  
+  except: return(None)
 
 
 
 def retornaParagrafosEInfos(pesquisa, paragrafos_separados, authenticator):
+  '''
+  Define e retorna uma lista
+  de dicionários contendo os
+  parágrafos e informações como
+  palavra-chave e imagens.
+  '''
   paragrafos_e_infos = list()
 
   for paragrafo in paragrafos_separados:
@@ -134,9 +199,14 @@ def retornaParagrafosEInfos(pesquisa, paragrafos_separados, authenticator):
   return(paragrafos_e_infos)
 
 def formataERetornaTexto(pesquisa, paragrafos_e_infos):
+  '''
+  Formata, em markdown, 
+  o texto final.
+  '''
   print('FORMATANDO PESQUISA...')
   texto = list()
   texto.append(f'# Pesquisa sobre: {pesquisa}')
+  texto.append('> Pesquisa feita automáticamente por [trabalhos-escolares-automaticos](https://github.com/luisfelipesdn12/trabalhos-escolares-automaticos). :) \n\n')
   
   for paragrafo in paragrafos_e_infos:
     texto.append(paragrafo['text'])
@@ -145,10 +215,15 @@ def formataERetornaTexto(pesquisa, paragrafos_e_infos):
 
   print('PESQUISA FORMATADA :)')
 
-  texto_final = '\n'.join(texto)
+  texto_final = '\n\n  '.join(texto)
   return(texto_final)
 
 def exportaArquivo(pesquisa, texto):
+  '''
+  Cria o aquivo final na pasta
+  './pesquisas', nomeado como:
+  "Termo da Pesquisa_pesquisa.md".
+  '''
   print(f'EXPORTANDO O ARQUIVO "{pesquisa}_pesquisa.md" ...')
 
   try:
@@ -164,13 +239,18 @@ def exportaArquivo(pesquisa, texto):
   
 
 def main():
+  '''
+  Orquestrador.
+  '''
   pesquisa = retornaPequisa()
+
+  percent = retornaPercentual()
 
   page = retornaWikiPage(pesquisa)
 
   conteudo_limpo = retornaConteudoLimpo(page.content)
 
-  resumo = retornaResumo(conteudo_limpo)
+  resumo = retornaResumo(conteudo_limpo, percent)
 
   paragrafos_separados = separaERetornaParagrafos(resumo)
 
