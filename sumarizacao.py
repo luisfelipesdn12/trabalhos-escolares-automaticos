@@ -22,13 +22,13 @@ class Texto:
         self._sentences = None
         self._graph = None
 
-    def resumir(self):
+    def resumir(self, percent):
         """
         Aqui a gente extrai as frases com maior pontuação.
         O tamanho do resumo será 20% do número de frases original
         """
         # aqui definindo a quantidade de frases
-        qtd = int(len(self.sentences) * 0.2) or 1
+        qtd = int(len(self.sentences) * float(percent)) or 1
 
         # ordenando as frases de acordo com a pontuação
         # e extraindo a quantidade desejada.
