@@ -8,7 +8,17 @@ Um programa que, a partir de um tema,  extrai conteúdo da Wikipedia, resume e a
 
 Digitar um tema e esperar. Depois de um tempo, ter em mãos um arquivo formatado com imagens e conteúdo resumido da Wikipedia. A ideia não é necessariamente ter o resultado final, mas ter algo próximo disso: algo que precisemos apenas fazer algumas alterações pequenas.
 
-## Execução:
+## Uso:
+
+1. **Tenha Python** instalado;
+2. **Clone ou baixe** o repositório;
+3. Vá na pasta `requirements` e **clique em `install_all.bat`**; isso vai instalar todos os pacotes e bibliotecas necessárias e instalar o plugin `punkt` do módulo `nltk`.
+4. **Execute o arquivo `main.py`** e digite o termo de pesquisa, e o percentual de resumo.
+5. **Vá para a pasta `pesquisa`** criada automaticamente na pasta onde o script foi executado; leia e faça aperfeiçoamentos, se necessário na sua pesquisa automática :)
+
+  **Algum problema ou sugestão?** Abra uma `issue`!
+
+## Funcionamento:
 
 > Nota: em aperfeiçoamento.
 
@@ -31,6 +41,7 @@ Digitar um tema e esperar. Depois de um tempo, ter em mãos um arquivo formatado
   > Para isso, usei um algoritmo de `Compreensão de Linguagem Natural` por inteligência artificial do `IBM Cloud/ Watson`, [clique aqui](https://cloud.ibm.com/catalog/services/natural-language-understanding) para ver.
 
 - Faz o **download de imagens** com base em palavras-chave extraídas do resumo;
+
   > Usei a API do `Google Cloud Platform` chamada `Custom Search`, [clique aqui](https://developers.google.com/custom-search/docs/overview) para ver.
 
 - Com todas as informações, formata um arquivo de texto com as imagens e o conteúdo;
