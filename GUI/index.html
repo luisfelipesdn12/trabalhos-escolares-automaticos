@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>TEA - GUI</title>
+    <style media="screen">
+@import url('https://fonts.googleapis.com/css?family=Cabin:700&display=swap');
+
+html {
+  text-align: center;
+}
+
+body {
+  weight: 1440px;
+  background-image: url(https://i.imgur.com/rRJGl8T.png);
+  background-size: 100% 190%;
+  background-position: 0px 120px;
+  background-repeat: no-repeat;
+  background-color: #1b1b1b;
+  font-family: 'Cabin', sans-serif;
+  color: #8E8D8D;
+  align-items: center;
+  align-content: center;
+  align-self: center;
+}
+
+.titulo {
+  font-family: 'Cabin', sans-serif;
+  color: #8E8D8D;
+  text-align: center;
+  grid-column: 1/6;
+  grid-row: 1/2;
+}
+
+.divisao {
+  height: 3px;
+  margin-left: 5%;
+  margin-right: 5%;
+  background-color: #8E8D8D;
+  grid-column: 1/6;
+  grid-row: 1/2;
+}
+
+.formulario {
+  display: inline-block;
+  margin-top: 15%;
+  align-self: center;
+  grid-row: 2/5;
+  grid-column: 1/6;
+}
+
+form {
+  font-size: 120%;
+}
+
+.avancado_e_gerar {
+  margin-top: 35px;
+}
+
+.avancado {
+  text-align: left;
+}
+
+#triangulo {
+  width: 4%;
+}
+
+.gerar {
+  margin-left: 100px;
+  text-align: right;
+}
+
+#gerar {
+  text-align: center;
+  width: 120px;
+}
+
+#pesquisa {
+  width: 350px;
+}
+
+#resumo {
+  width: 350px;
+}
+
+input {
+  border-radius: 20px;
+  background-color: #151515;
+  border-color: #474747;
+  font-family: 'Cabin', sans-serif;
+  color: #8E8D8D;
+  border-style: solid;
+  font-size:100%;
+  text-align: center;
+}
+
+    </style>
+  </head>
+  <body>
+<div class="titulo">
+<h1>Trabalhos Escolares Automaticos</h1>
+<div class="divisao"></div>
+</div>
+<div class="background">
+
+</div>
+<!--img class="background" src="https://i.imgur.com/rRJGl8T.png" alt="background">
+-->
+<div class="formulario">
+  <form>
+    <div class="pesquisa">
+      <label for="pesquisa">Pesquisa:</label>
+      <input type="text" id="pesquisa" name="pesquisa"><br><br>
+    </div>
+    <div class="resumo">
+      <label for="resumo">Resumo:</label>
+      <input type="" value="0.4" id="resumo" name="resumo"><br><br>
+    </div>
+  <div class="avancado_e_gerar">
+    <div class="avancado">
+      <p><img id="triangulo" onclick="location.href='page2.html'" src="https://i.imgur.com/I9ExJes.png" alt="triangulin"> Configurações avançadas<input class="gerar" id="gerar" type="submit" value="Gerar"></p>
+    </div>
+    <!--<div class="gerar">
+      <input id="gerar" type="submit" value="Gerar">
+    </div>-->
+  </div>
+  </form>
+</div>
+  </body>
+</html>
