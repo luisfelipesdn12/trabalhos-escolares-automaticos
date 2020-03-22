@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt" dir="ltr">
   <head>
+    <script type="text/javascript">
+        function showAdvanced() {
+          if (document.getElementById('mais_opcs').style.display == 'none') {
+            document.getElementById('mais_opcs').style.display = 'block';
+          }
+          else if (document.getElementById('mais_opcs').style.display == 'block') {
+            document.getElementById('mais_opcs').style.display = 'none';
+          }
+
+          if (document.getElementById('triangulo').style.transform == 'rotate(90deg)') {
+            document.getElementById('triangulo').style.transform = 'rotate(0deg)';
+          }
+          else {
+            document.getElementById('triangulo').style.transform = 'rotate(90deg)';
+          }
+        }
+
+        function geraPorcentagem() {
+          document.write(Math.random().toFixed(2));
+        }
+    </script>
     <meta charset="utf-8">
     <title>TEA - GUI</title>
     <style media="screen">
@@ -11,9 +32,8 @@ html {
 }
 
 body {
-  weight: 1440px;
   background-image: url(https://i.imgur.com/rRJGl8T.png);
-  background-size: 100% 190%;
+  background-size: 100% 130%;
   background-position: 0px 120px;
   background-repeat: no-repeat;
   background-color: #1b1b1b;
@@ -114,15 +134,15 @@ input {
     </div>
     <div class="resumo">
       <label for="resumo">Resumo:</label>
-      <input type="" value="0.4" id="resumo" name="resumo"><br><br>
+      <input type="" value="" id="resumo" name="resumo"><br>e.g.: <script>geraPorcentagem()</script><br>
     </div>
   <div class="avancado_e_gerar">
     <div class="avancado">
-      <p><img id="triangulo" onclick="location.href='page2.html'" src="https://i.imgur.com/I9ExJes.png" alt="triangulin"> Configurações avançadas<input class="gerar" id="gerar" type="submit" value="Gerar"></p>
+      <p><img id="triangulo" onclick="showAdvanced()" src="https://i.imgur.com/I9ExJes.png" alt="triangulin"> Configurações avançadas<input class="gerar" id="gerar" type="submit" value="Gerar"></p>
     </div>
-    <!--<div class="gerar">
-      <input id="gerar" type="submit" value="Gerar">
-    </div>-->
+  </div>
+  <div class="mais_opcs" id="mais_opcs" style="display: none;">
+  <p>SOMETHINGLLLLsssss</p>
   </div>
   </form>
 </div>
